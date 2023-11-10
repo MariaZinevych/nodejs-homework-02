@@ -14,7 +14,7 @@ const getOneTaskService = async (id) => {
   return task;
 };
 
-const createTaskServices = async (body) => {
+const createTaskService = async (body) => {
   const tasks = await readDb();
   const newTask = { ...body, id: crypto.randomUUID() };
 
@@ -23,17 +23,33 @@ const createTaskServices = async (body) => {
   return newTask;
 };
 
-const deleteTask = async (id) => {
+const putTaskService = async (id, body) => {
   const tasks = await readDb();
-  const task = tasks.find((task) => task.id === id);
-  tasks = [...newtasks];
-  res.status(204).json();
-  return newTasks;
+  const task = tasks.findIndex((el) => el.id === id);
+  if (task === -1) {
+    return null;
+  }
+  tasks[task] = { id, ...body };
+  await writeDb(tasks);
+  return tasks[task];
+};
+
+const deleteTaskService = async (id) => {
+  const tasks = await readDb();
+  const index = tasks.findIndex((el) => el.id === id);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = tasks.splice(index, 1);
+
+  await writeDb(tasks);
+  return result;
 };
 
 module.exports = {
   getAllTasksService,
   getOneTaskService,
-  createTaskServices,
-  deleteTask,
+  createTaskService,
+  deleteTaskService,
+  putTaskService,
 };

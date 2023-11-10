@@ -8,16 +8,16 @@ const {
   createTask,
   deleteTaskById,
   updateTask,
-} = require("/controllers/controllerContacts");
+} = require("../../controllers/controllerContacts");
 
 router.get("/", getAllTasks);
 
-router.get("/:contactId", getOneTask);
+router.get("/:id", getOneTask);
 
 router.post("/", createTask);
 
-router.delete("/:contactId", deleteTaskById);
+router.delete("/:id", deleteTaskById);
 
-router.put("/:contactId", updateTask);
+router.put("/:id", updateTask);
 
 module.exports = { tasksRouter: router };
