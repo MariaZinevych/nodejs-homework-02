@@ -1,5 +1,3 @@
-const { NotFound } = require("http-errors");
-const { HttpError } = require("../httpError/httpsError");
 const Joi = require("joi");
 
 const {
@@ -37,7 +35,6 @@ const createTask = async (req, res, next) => {
     if (error) {
       res.status(500).json({ message: error.message });
     }
-
     const newTask = await createTaskService(req.body);
     res.status(201).json(newTask);
   } catch (error) {
@@ -48,7 +45,7 @@ const createTask = async (req, res, next) => {
 const deleteTaskById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const newTasks = deleteTaskService(id);
+    const newTasks = await deleteTaskService(id);
     if (!newTasks) {
       res.status(500).json({ message: error.message });
     }
@@ -65,7 +62,7 @@ const updateTask = async (req, res, next) => {
       res.status(500).json({ message: error.message });
     }
     const { id } = req.params;
-    const putTask = putTaskService(id, req.body);
+    const putTask = await putTaskService(id, req.body);
     if (!putTask) {
       res.status(500).json({ message: error.message });
     }
