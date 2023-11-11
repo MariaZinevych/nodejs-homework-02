@@ -41,7 +41,6 @@ const deleteTaskService = async (id) => {
     return null;
   }
   const [result] = tasks.splice(index, 1);
-
   await writeDb(tasks);
   return result;
 };
