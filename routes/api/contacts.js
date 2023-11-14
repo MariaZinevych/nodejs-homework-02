@@ -1,5 +1,7 @@
 const express = require("express");
 
+const isValidId = require("../../utils/isValidId");
+
 const router = express.Router();
 
 const {
@@ -8,16 +10,19 @@ const {
   createTask,
   deleteTaskById,
   updateTask,
+  updateFavorite,
 } = require("../../controllers/controllerContacts");
 
 router.get("/", getAllTasks);
 
-router.get("/:id", getOneTask);
+router.get("/:id", isValidId, getOneTask);
 
 router.post("/", createTask);
 
-router.delete("/:id", deleteTaskById);
+router.delete("/:id", isValidId, deleteTaskById);
 
-router.put("/:id", updateTask);
+router.put("/:id", isValidId, updateTask);
+
+router.patch("/:id/favorite", isValidId, updateFavorite);
 
 module.exports = { tasksRouter: router };
