@@ -1,7 +1,13 @@
 const { Contact, schemas } = require("../models/contacts");
 
 const getAllTasks = async (req, res, next) => {
-  const tasks = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const tasks = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "name email");
   res.status(200).json(tasks);
 };
 
@@ -45,7 +51,7 @@ const updateFavorite = async (req, res, next) => {
   try {
     const { error } = schemas.updateFavoriteSchema.validate(req.body);
     if (error) {
-      res.status(500).json({ message: error.message });
+      res.status(406).json({ message: error.message });
     }
     const { id } = req.params;
     const putTask = await Contact.findByIdAndUpdate(id, req.body, {
