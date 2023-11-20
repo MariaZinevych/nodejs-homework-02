@@ -27,7 +27,8 @@ const createTask = async (req, res, next) => {
     if (error) {
       res.status(500).json({ message: error.message });
     }
-    const newTask = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const newTask = await Contact.create({ ...req.body, owner });
     res.status(201).json(newTask);
   } catch (error) {
     res.status(500).json({ message: error.message });
