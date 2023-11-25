@@ -6,9 +6,11 @@ const {
   login,
   getCurrent,
   logout,
+  updateAvatar,
 } = require("../../controllers/auth.js");
 
 const validateBody = require("../../utils/validateBody");
+const upload = require("../../utils/upload.js");
 
 const { schemas } = require("../../models/users");
 
@@ -23,5 +25,6 @@ router.post("/login", validateBody(schemas.loginSchema), login);
 router.get("/current", authenticate, getCurrent);
 
 router.post("/logout", authenticate, logout);
+router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
 
 module.exports = { authRouter: router };
